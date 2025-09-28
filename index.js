@@ -17,6 +17,9 @@ const orbitControls = createControls(camera, renderer);
 
 // Create pointer lock controls
 const pointerLockControls = new PointerLockControls(camera, renderer.domElement);
+const pointerLockEntity = typeof pointerLockControls.getObject === 'function'
+  ? pointerLockControls.getObject()
+  : camera;
 
 // Get the FPS display element and camera mode indicator
 const fpsDisplay = document.getElementById('fps-display');
@@ -26,6 +29,7 @@ const cameraModeIndicator = document.getElementById('camera-mode-indicator');
 const clock = new THREE.Clock();
 let frameCount = 0;
 let lastTime = 0;
+let accumulatedTime = 0;
 
 // Camera mode
 let cameraMode = 'orbit'; // 'orbit' or 'free'
@@ -39,6 +43,7 @@ const moveState = {
 };
 const velocity = new THREE.Vector3();
 const moveSpeed = 10;
+const forwardVector = new THREE.Vector3();
 
 // Add event listeners for keydown and keyup
 const onKeyDown = (event) => {
@@ -113,38 +118,33 @@ scene.background = new THREE.Color(0xffffff);
 
 // Animation loop
 function animate() {
-  const time = clock.getElapsedTime();
+  const delta = clock.getDelta();
+  accumulatedTime += delta;
   frameCount++;
-  
+
   // Update FPS display every second
-  if (time >= lastTime + 1) {
-    const fps = frameCount / (time - lastTime);
+  if (accumulatedTime >= lastTime + 1) {
+    const fps = frameCount / (accumulatedTime - lastTime);
     fpsDisplay.textContent = `FPS: ${fps.toFixed(1)}`;
     frameCount = 0;
-    lastTime = time;
+    lastTime = accumulatedTime;
   }
-  
+
   // If in free mode and pointer is locked, update camera movement
   if (cameraMode === 'free' && pointerLockControls.isLocked) {
-    const delta = clock.getDelta(); // Time since last frame
-    
-    // Simple axis-based movement
+    const moveDistance = moveSpeed * delta;
+    forwardVector.set(0, 0, -1);
+    forwardVector.applyQuaternion(pointerLockEntity.quaternion).normalize();
+
     if (moveState.forward) {
-      camera.position.x += moveSpeed * delta; // W: move right
+      pointerLockEntity.position.addScaledVector(forwardVector, moveDistance);
     }
     if (moveState.backward) {
-      camera.position.x -= moveSpeed * delta; // S: move left
-    }
-    if (moveState.left) {
-      camera.position.z += moveSpeed * delta; // A: move forward
-    }
-    if (moveState.right) {
-      camera.position.z -= moveSpeed * delta; // D: move backward
+      pointerLockEntity.position.addScaledVector(forwardVector, -moveDistance);
     }
   }
-  
-  
-  
+
+
   // Update the controls based on the mode
   if (cameraMode === 'orbit') {
     orbitControls.update();
