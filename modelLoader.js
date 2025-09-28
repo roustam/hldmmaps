@@ -1,6 +1,39 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+const MODEL_URLS = {
+  './assets/models/bootcamp_1.glb': new URL('./assets/models/bootcamp_1.glb', import.meta.url).href,
+  './assets/models/rex.glb': new URL('./assets/models/rex.glb', import.meta.url).href,
+  './assets/models/bounce_1.glb': new URL('./assets/models/bounce_1.glb', import.meta.url).href,
+  './assets/models/stalkyard.glb': new URL('./assets/models/stalkyard.glb', import.meta.url).href
+};
+
+const resolveModelUrl = (rawPath) => {
+  if (typeof rawPath !== 'string' || rawPath.length === 0) {
+    return rawPath;
+  }
+
+  if (rawPath.startsWith('http://') || rawPath.startsWith('https://')) {
+    return rawPath;
+  }
+
+  if (MODEL_URLS[rawPath]) {
+    return MODEL_URLS[rawPath];
+  }
+
+  const withDotPrefix = rawPath.startsWith('./')
+    ? rawPath
+    : rawPath.startsWith('/')
+    ? `.${rawPath}`
+    : `./${rawPath}`;
+
+  if (MODEL_URLS[withDotPrefix]) {
+    return MODEL_URLS[withDotPrefix];
+  }
+
+  return new URL(withDotPrefix, import.meta.url).href;
+};
+
 export function loadModel(scene, camera, controls, options = {}) {
   const {
     path = './assets/models/bootcamp_1.glb',
@@ -16,7 +49,7 @@ export function loadModel(scene, camera, controls, options = {}) {
   } = options;
 
   const loader = new GLTFLoader();
-  const modelUrl = new URL(path, import.meta.url).href;
+  const modelUrl = resolveModelUrl(path);
 
   loader.load(
     modelUrl,
