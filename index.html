@@ -2,29 +2,104 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>My first three.js app</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+JP+N&display=swap" rel="stylesheet">
+    <title>HLDM Maps</title>
     <style>
-      body { margin: 0; }
-      #stats-container {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 100;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 5px;
-        font-family: monospace;
+      :root {
+        color-scheme: dark light;
       }
-      #camera-mode-indicator {
-        margin-top: 5px;
+      body {
+        font-family: "WDXL Lubrifont JP N";
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #0e1a2a, #020509);
+        color: #f3f6fb;
+      }
+      .card {
+        background: whitesmoke;
+        border: 1px solid rgba(110, 160, 255, 0.25);
+        border-radius: 18px;
+        padding: 32px 40px;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+        max-width: 440px;
+        width: 90vw;
+        backdrop-filter: blur(16px);
+        color:khaki
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 2rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color:	#fb7e14;
+      }
+      p {
+        margin: 0 0 20px;
+        color:#444444;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 12px;
+      }
+
+      small {
+        display: block;
+        margin-top: 20px;
+        color: #444444;
+        font-size: 0.8rem;
+      }
+      tg-link {
+        color: #ffa500;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.15s ease;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+      }
+      tg-link:hover {
+        padding-top: 1rem;
+        color: #ffd500;
+        text-decoration: underline;
       }
     </style>
   </head>
   <body>
-    <div id="stats-container">
-      <div id="fps-display">FPS: 0</div>
-      <div id="camera-mode-indicator">Camera Mode: Orbit</div>
-    </div>
-    <script type="module" src="/index.js"></script>
+    <main class="card">
+      <h1>Карты Half Life Deathmatch</h1>
+      <p>Выберите карту для просмотра</p>
+      <p>Кнопка "пробел" для переключения режима камеры</p>
+      <p>Используйте W и D для движения вперед и назад.</p>
+      <p>Кнопка "esc" для выхода из режима камеры</p>
+      <p>Нажмите "назад", чтобы вернуться к странице выбора карт.</p>
+      
+      <p>Доступные карты</p>
+      <ul style="margin-bottom: 20px;">
+        <li><a href="./viewer.html?model=bootcamp">Bootcamp Base</a></li>
+        <li><a href="./viewer.html?model=bounce">Bounce Arena</a></li>
+        <li><a href="./viewer.html?model=stalkyard">Stalkyard</a></li>
+      </ul>
+<p>
+  
+        Все пока ещё очень сырое.
+        Предметы пока еще не везде и не на своих местах.
+        Но в основном - 
+        <span style="color: #ffa500; font-weight: bold;">это работает.</span>
+  </p>
+        <p>
+          <a href="https://t.me/M4Robt" class="tg-link">
+            Подписывайтесь на канал в телеграме. 
+          </a>
+        </p>
+
+    </main>
   </body>
 </html>
