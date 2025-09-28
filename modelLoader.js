@@ -1,9 +1,11 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export function loadModel(scene, camera, controls) {
   const loader = new GLTFLoader();
-  loader.load('models/bootcamp_1.glb', 
+  const modelUrl = new URL('./assets/models/bootcamp_1.glb', import.meta.url).href;
+
+  loader.load(modelUrl, 
     function (gltf) {
       console.log('Model loaded successfully');
       scene.add(gltf.scene);
